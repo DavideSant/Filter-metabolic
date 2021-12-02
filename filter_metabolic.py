@@ -5,10 +5,9 @@ import pandas as pd
 import argparse
 import os
 
-"""
-TODO opzionare per tenere come MAG abbondanti solo quelli che sono sopra la soglia
-in almeno una specificata percentuale dei replicati
-TODO opzionare per tenere solo le funzioni che sono presenti in almeno tot MAGs abbondanti
+""" compared to main branch:
+    - takes abundances file without the empty row above.
+    - exports sheets as .tsv rather than .csv
 """
 
 parser = argparse.ArgumentParser()
@@ -64,42 +63,42 @@ def process_worksheet(sheet):
         pattern = (1, 3)
         keeps_present = False
         keeps_nonzero = True
-        sheet_name = "HMMHitNum.csv"
+        sheet_name = "HMMHitNum.tsv"
     if sheet == 2:
         to_strip = [" Function presence"]
         mags_starting_column = 3
         pattern = (None, None)
         keeps_present = True
         keeps_nonzero = False
-        sheet_name = "FunctionHit.csv"
+        sheet_name = "FunctionHit.tsv"
     if sheet == 3:
         to_strip = [" Module presence"]
         mags_starting_column = 3
         pattern = (None, None)
         keeps_present = True
         keeps_nonzero = False
-        sheet_name = "KEGGModuleHit.csv"
+        sheet_name = "KEGGModuleHit.tsv"
     if sheet == 4:
         to_strip = [" Module step presence"]
         mags_starting_column = 4
         pattern = (None, None)
         keeps_present = True
         keeps_nonzero = False
-        sheet_name = "KEGGModuleStepHit.csv"
+        sheet_name = "KEGGModuleStepHit.tsv"
     if sheet == 5:
         to_strip = [" Hit numbers", " Hits"]
         mags_starting_column = 1
         pattern = (0, 2)
         keeps_present = False
         keeps_nonzero = True
-        sheet_name = "dbCAN2Hit.csv"
+        sheet_name = "dbCAN2Hit.tsv"
     if sheet == 6:
         to_strip = [" Hit numbers", " Hits"]
         mags_starting_column = 1
         pattern = (0, 2)
         keeps_present = False
         keeps_nonzero = True
-        sheet_name = "MEROPSHit.csv"
+        sheet_name = "MEROPSHit.tsv"
 
         
     try:
@@ -141,7 +140,7 @@ if os.path.isfile(args.abundances) == False:
     raise SystemExit
 
 
-df = pd.read_csv(args.abundances, sep='\t', header=1)
+df = pd.read_csv(args.abundances, sep='\t', header=0)
 df["user_genome"] = fix_underscores(df["user_genome"])
 
 if args.taxonomy == True:
@@ -178,4 +177,3 @@ create_log()
 #print("\n")
 print(*log())
 #print("\n")
-##############################################################
